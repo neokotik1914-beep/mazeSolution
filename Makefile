@@ -21,7 +21,7 @@ all: $(OBJDIR) $(TARGET)
 
 # Створення папки build
 $(OBJDIR):
-	if not exist "$(OBJDIR)" mkdir "$(OBJDIR)"
+	mkdir -p $(OBJDIR)
 
 # Лінкування
 $(TARGET): $(OBJ)
