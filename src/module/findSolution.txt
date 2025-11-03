@@ -1,6 +1,0 @@
-#include "module\findSolution.hpp"
-
-void solution(int arr[][]) {
-    
-}
-

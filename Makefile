@@ -11,7 +11,8 @@ OBJDIR = build
 # Всі .cpp файли
 SRC_ROOT = $(wildcard src/*.cpp)
 SRC_MODULE = $(wildcard src/module/*.cpp)
-SRC = $(SRC_ROOT) $(SRC_MODULE)
+SRC_ALGORYTHM = $(wildcard src/algorythm/*.cpp)
+SRC = $(SRC_ROOT) $(SRC_MODULE) $(SRC_ALGORYTHM)
 
 # Імена .o файлів у build/ (без підпапок)
 OBJ = $(addprefix $(OBJDIR)/,$(notdir $(SRC:.cpp=.o)))
@@ -32,6 +33,9 @@ $(OBJDIR)/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: src/module/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: src/algorythm/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Очищення
