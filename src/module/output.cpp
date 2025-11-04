@@ -3,6 +3,9 @@
 
 #include "module\output.h"
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+
 void output(data myData) {
     system("chcp 65001 > nul");
     printf("Outputing...\n");
@@ -14,11 +17,11 @@ void output(data myData) {
             
             if(myData.arr[i][j] == 10)
             {
-                printf("@");
+                printf("\x1b[32m@");
             }
             else if(myData.arr[i][j] == 9)
             {
-                printf("X");
+                printf("\x1b[32mX");
             }
             else if(myData.arr[i][j] == 0 or myData.arr[i][j] == 2)
             {
@@ -26,42 +29,43 @@ void output(data myData) {
             }
             else if(myData.arr[i][j] == 1)
             {
-                printf("█");
+                printf("\x1b[31m█");
             }
             else if(myData.arr[i][j] == 11)
             {
-                printf("↓");
+                printf("\x1b[32m↓");
             }
             else if(myData.arr[i][j] == 12)
             {
-                printf("↘");
+                printf("\x1b[32m↘");
             }
             else if(myData.arr[i][j] == 13)
             {
-                printf("→");
+                printf("\x1b[32m→");
             }
             else if(myData.arr[i][j] == 14)
             {
-                printf("↗");
+                printf("\x1b[32m↗");
             }
             else if(myData.arr[i][j] == 15)
             {
-                printf("↑");
+                printf("\x1b[32m↑");
             }
             else if(myData.arr[i][j] == 16)
             {
-                printf("↖");
+                printf("\x1b[32m↖");
             }
             else if(myData.arr[i][j] == 17)
             {
-                printf("←");
+                printf("\x1b[32m←");
             }
             else if(myData.arr[i][j] == 18)
             {
-                printf("↙");
+                printf("\x1b[32m↙");
             }
             
         }
         printf("\n");
     }
+    printf("\33[0mPrinted");
 }
