@@ -7,7 +7,6 @@ void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLeng
 {
     int x = stack[0][index];
     int y = stack[1][index];
-    myData->arr[x][y] = 2;
     if(x == myData->finish.x and y == myData->finish.y)
     {
       boolGlobal = 1;
@@ -19,6 +18,7 @@ void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLeng
       stack[1][stackLength] = y;
       stack[2][stackLength] = stack[2][index] + 1;
       stack[3][stackLength] = index;
+      myData->arr[x - 1][y] = 2;
       stackLength++;
     }
     if (x + 1 < myData->n and (myData->arr[x + 1][y] == 0))
@@ -27,6 +27,7 @@ void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLeng
       stack[1][stackLength] = y;
       stack[2][stackLength] = stack[2][index] + 1;
       stack[3][stackLength] = index;
+      myData->arr[x + 1][y] = 2;
       stackLength++;
     }
     if (y - 1 >= 0 and (myData->arr[x][y - 1] == 0))
@@ -35,6 +36,7 @@ void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLeng
       stack[1][stackLength] = y - 1;
       stack[2][stackLength] = stack[2][index] + 1;
       stack[3][stackLength] = index;
+      myData->arr[x][y - 1] = 2;
       stackLength++;
     }
     if (y + 1 < myData->m and (myData->arr[x][y + 1] == 0))
@@ -43,6 +45,7 @@ void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLeng
       stack[1][stackLength] = y + 1;
       stack[2][stackLength] = stack[2][index] + 1;
       stack[3][stackLength] = index;
+      myData->arr[x][y + 1] = 2;
       stackLength++;
     }
 }
