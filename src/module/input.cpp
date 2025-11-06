@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "module\input.h"
+#include "module/input.h"
 
 std::vector<std::vector<char>> input() {
   int n, m;

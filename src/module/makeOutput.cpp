@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "module\makeOutput.h"
-#include "module\consts.h"
+#include "module/makeOutput.h"
+#include "module/consts.h"
 
 void makeOutput(data *myData) {
     printf("Making Output\n");

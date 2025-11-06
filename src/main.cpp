@@ -1,11 +1,13 @@
 #include <stdio.h>
+#include <SFML/Graphics.hpp>
 
-#include "algorythm\maze.h"
-#include "module\input.h"
-#include "algorythm\mazeSolver.h"
-#include "module\output.h"
-#include "module\consts.h"
-#include "module\makeOutput.h"
+#include "algorythm/maze.h"
+#include "module/input.h"
+#include "algorythm/mazeSolver.h"
+#include "module/output.h"
+#include "module/consts.h"
+#include "module/makeOutput.h"
+#include "module/windowOutput.h"
 
 int main()
 {
@@ -27,5 +29,30 @@ int main()
         printf("N\n");
     }
     makeOutput(&myData);
+
+    sf::RenderWindow window(sf::VideoMode({800, 800}), "answer");
+    window.setVerticalSyncEnabled(true);
+    window.setFramerateLimit(60);
+
+    window.setPosition({10, 50});
+
+    while (window.isOpen())
+    {
+        // check all the window's events that were triggered since the last iteration of the loop
+        while (const std::optional event = window.pollEvent())
+        {
+            // "close requested" event: we close the window
+            if (event->is<sf::Event::Closed>())
+                window.close();
+        }
+        window.clear(sf::Color::White);
+
+        winOut(myData, &window);
+
+        window.display();
+
+
+    }
+
     output(myData);
 }

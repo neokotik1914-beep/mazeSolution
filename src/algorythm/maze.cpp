@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "algorythm\maze.h"
+#include "algorythm/maze.h"
 
 void convert(data *myData, std::vector<std::vector<char>> maze)
 {

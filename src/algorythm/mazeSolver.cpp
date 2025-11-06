@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "algorythm\mazeSolver.h"
-#include "module\consts.h"
+#include "algorythm/mazeSolver.h"
+#include "module/consts.h"
 
 void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLength, bool& boolGlobal)
 {
