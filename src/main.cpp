@@ -8,6 +8,7 @@
 #include "module/consts.h"
 #include "module/makeOutput.h"
 #include "module/windowOutput.h"
+#include "module/mouseWork.h"
 
 int main()
 {
@@ -28,11 +29,11 @@ int main()
     else{
         printf("N\n");
     }
-    makeOutput(&myData);
+    //makeOutput(&myData);
 
     sf::RenderWindow window(sf::VideoMode({800, 800}), "answer");
     window.setVerticalSyncEnabled(true);
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(10);
 
     window.setPosition({10, 50});
 
@@ -44,9 +45,16 @@ int main()
             // "close requested" event: we close the window
             if (event->is<sf::Event::Closed>())
                 window.close();
+            if (const auto* e = event->getIf<sf::Event::MouseButtonPressed>())
+            {
+                if (e->button == sf::Mouse::Button::Left)
+                mouseWork(&myData, &window);
+                e = NULL;
+                output(myData);
+            }
+            
         }
         window.clear(sf::Color::White);
-
         winOut(myData, &window);
 
         window.display();

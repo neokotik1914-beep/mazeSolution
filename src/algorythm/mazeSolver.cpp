@@ -54,6 +54,8 @@ bool solve(data *myData)
 {
   printf("Solving...\n");
   bool boolGlobal = 0;
+  myData->arr[myData->start.x][myData->start.y] = 0;
+  myData->arr[myData->finish.x][myData->finish.y] = 0;
   int stack[4][MAX_STACK_LENGTH];
   int stackLength = 1;
   stack[0][0] = myData->start.x;
@@ -90,6 +92,18 @@ bool solve(data *myData)
 
      }
     }
+    for(int i = 0; i < myData->n; i++)
+    {
+      for(int j = 0; j < myData->m; j++)
+      {
+        if(myData->arr[i][j] == 2)
+        {
+          myData->arr[i][j] = 0;
+        }
+      }
+    }
+    myData->arr[myData->start.x][myData->start.y] = 10;
+    myData->arr[myData->finish.x][myData->finish.y] = 9;
     printf("Solved\n");
     return boolGlobal;
 }

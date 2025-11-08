@@ -39,6 +39,68 @@ void drawWall(RenderWindow *w, float x, float y, float size)
 
 }
 
+inline bool isPathCell(int v)
+{
+    return (v == 3 || v == 9 || v == 10);
+}
+
+void drawPath(RenderWindow *w, int row, int col, float size, data myData)
+{
+    float offSet = size / 5;
+
+    sf::RectangleShape grass({size, size});
+    grass.setFillColor(sf::Color(0, 255, 0));
+    grass.setPosition({col * size, row * size});
+    w->draw(grass);
+
+    sf::RectangleShape path({size - offSet, size - 2 * offSet});
+    path.setFillColor(sf::Color(255, 255, 0));
+
+    float x = col * size;
+    float y = row * size;
+
+    if(row - 1 >= 0 && isPathCell(myData.arr[row - 1][col]))
+    {
+        path.setPosition({x + size - offSet, y});
+        path.setRotation(sf::degrees(90));
+        w->draw(path);
+    }
+
+    if(col + 1 < myData.m && isPathCell(myData.arr[row][col + 1]))
+    {
+        path.setPosition({x + size, y + size - offSet});
+        path.setRotation(sf::degrees(180));
+        w->draw(path);
+    }
+
+    if(row + 1 < myData.n && isPathCell(myData.arr[row + 1][col]))
+    {
+        path.setPosition({x + offSet, y + size});
+        path.setRotation(sf::degrees(-90));
+        w->draw(path);
+    }
+
+    if(col - 1 >= 0 && isPathCell(myData.arr[row][col - 1]))
+    {
+        path.setPosition({x, y + offSet});
+        path.setRotation(sf::degrees(0));
+        w->draw(path);
+    }
+}
+
+
+void drawPOI(RenderWindow *w, int x, int y, float size, data myData)
+{
+    drawPath(w, x, y, size, myData);
+
+    float offSet = size / 6;
+
+    sf::RectangleShape house({size - 2 * offSet, size - 2 * offSet});
+    house.setFillColor(sf::Color(160, 160, 160));
+    house.setPosition({y * size + offSet, x * size + offSet});
+    w->draw(house);
+}
+
 void winOut(data myData, RenderWindow *window)
 {
     float recSize = window->getSize().x/myData.n;
@@ -65,23 +127,21 @@ void winOut(data myData, RenderWindow *window)
             }
             else if(myData.arr[i][j] == 10)
             {
-                start.setPosition({(j * recSize), (i * recSize)});
-                window->draw(start);
+                drawPOI(window, i, j, recSize, myData);
             }
             else if(myData.arr[i][j] == 9)
             {
                 finish.setPosition({(j * recSize), (i * recSize)});
                 window->draw(finish);
             }
-            else if(myData.arr[i][j] == 0 or myData.arr[i][j] == 2)
+            else if(myData.arr[i][j] == 0)
             {
                 grass.setPosition({(j * recSize), (i * recSize)});
                 window->draw(grass);
             }
-            else
+            else if (myData.arr[i][j] == 3)
             {
-                path.setPosition({(j * recSize), ((i * recSize))});
-                window->draw(path);
+                drawPath(window, i, j, recSize, myData);
             }
         }
     }

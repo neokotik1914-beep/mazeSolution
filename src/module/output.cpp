@@ -23,13 +23,17 @@ void output(data myData) {
             {
                 printf("\x1b[32mX");
             }
-            else if(myData.arr[i][j] == 0 or myData.arr[i][j] == 2)
+            else if(myData.arr[i][j] == 0)
             {
                 printf(" ");
             }
             else if(myData.arr[i][j] == 1)
             {
                 printf("\x1b[31m█");
+            }
+            else if(myData.arr[i][j] == 3)
+            {
+                printf("\x1b[31m+");
             }
             else if(myData.arr[i][j] == 11)
             {
