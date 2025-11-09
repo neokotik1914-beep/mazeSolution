@@ -9,16 +9,18 @@ void mouseWork(data *myData, sf::RenderWindow *window)
     sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
 
     float recSizeX = window->getSize().x / myData->n;
-    float recSizeY = window->getSize().y / myData->m;
 
     int x = localPosition.x / recSizeX;
     int y = localPosition.y / recSizeX;
 
-    if (x < 0 || x >= myData->n || y < 0 || y >= myData->m) 
+    if (x < 0 || x >= myData->m || y < 0 || y >= myData->n) 
         return;
 
     if(myData->arr[y][x] == 0)
+    {
         myData->arr[y][x] = 1;
+        return;
+    }
     else if(myData->arr[y][x] == 1)
         myData->arr[y][x] = 0;
     else if(myData->arr[y][x] == 3)
