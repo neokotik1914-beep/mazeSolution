@@ -50,7 +50,7 @@ void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLeng
     }
 }
 
-bool solve(data *myData)
+void solve(data *myData)
 {
   printf("Solving...\n");
   bool boolGlobal = 0;
@@ -105,5 +105,6 @@ bool solve(data *myData)
     myData->arr[myData->start.x][myData->start.y] = 10;
     myData->arr[myData->finish.x][myData->finish.y] = 9;
     printf("Solved\n");
-    return boolGlobal;
+    myData->answer = boolGlobal;
+    return;
 }

@@ -145,4 +145,25 @@ void winOut(data myData, RenderWindow *window)
             }
         }
     }
+    if(!myData.answer)
+    {
+        sf::Texture gorillaTexture;
+
+        if(!gorillaTexture.loadFromFile("C:/Users/user/code/mazeSolution/image.png"))
+        {
+            
+        }
+
+        sf::Sprite gorilla(gorillaTexture);
+        gorilla.setPosition({0.f, 0.f});
+
+        // Масштабування на всю область вікна
+        sf::Vector2u texSize = gorillaTexture.getSize();
+        sf::Vector2u winSize = window->getSize();
+        float scaleX = static_cast<float>(winSize.x) / texSize.x;
+        float scaleY = static_cast<float>(winSize.y) / texSize.y;
+        gorilla.setScale({scaleX, scaleY});
+
+        window->draw(gorilla);
+    }
 }

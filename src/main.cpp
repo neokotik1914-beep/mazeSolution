@@ -20,9 +20,9 @@ int main()
     myData.m = maze[0].size();
     convert(&myData, maze);
 
-    bool answer = solve(&myData);
+    solve(&myData);
 
-    if(answer)
+    if(myData.answer)
     {
         printf("Y\n");
     }

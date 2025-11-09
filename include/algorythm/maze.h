@@ -13,6 +13,7 @@ struct data{
     coords finish;
     int n;
     int m;
+    bool answer;
     std::vector<std::vector<int>> arr;
 
     data(int n, int m, int defaultValue) 

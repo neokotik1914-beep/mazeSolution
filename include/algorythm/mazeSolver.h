@@ -6,6 +6,6 @@
 
 void walk(data *myData, int stack[][MAX_STACK_LENGTH], int i, int& stackLength, bool& boolGlobal);
 
-bool solve(data *myData);
+void solve(data *myData);
 
 #endif

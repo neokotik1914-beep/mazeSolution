@@ -36,5 +36,5 @@ void mouseWork(data *myData, sf::RenderWindow *window)
             }
         }
     }
-    bool answer = solve(myData);
+    solve(myData);
 }
