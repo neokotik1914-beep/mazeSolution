@@ -6,6 +6,7 @@
 
 #include "module/windowOutput.h"
 #include "algorythm/maze.h"
+#include "module/getCoord.h"
 
 #define _USE_MATH_DEFINES
 
@@ -132,9 +133,17 @@ void drawPOI(RenderWindow *w, int y, int x, float sizeX, float sizeY, data myDat
     float offSetY = sizeY / 6;
 
     sf::RectangleShape house({sizeX - 2 * offSetX, sizeY - 2 * offSetY});
-    house.setFillColor(sf::Color(160, 160, 160));
+    house.setFillColor(sf::Color(227, 0, 77));
     house.setPosition({x * sizeX + offSetX, y * sizeY + offSetY});
     w->draw(house);
+
+    sf::CircleShape roof(sizeX - 4 * offSetX, 3);
+    roof.setFillColor(sf::Color(166, 160, 126));
+    roof.scale({1.7f, 0.3f});
+
+    roof.setOrigin({(sizeX - 2 * offSetX) / 2, 0});
+    roof.setPosition({x * sizeX + sizeX / 2, y * sizeY});
+    w->draw(roof);
 }
 
 
@@ -184,6 +193,37 @@ void winOut(data myData, RenderWindow *window, sf::Clock *clock)
             }
         }
     }
+
+    sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
+    sf::Vector2f worldPos = window->mapPixelToCoords(localPosition);
+
+    recSizeX = (float)(window->getSize().x) / myData.m;
+    recSizeY = (float)(window->getSize().y) / myData.n;
+
+    //printf("winout %f %f, %f %f ", worldPos.x, worldPos.y, recSizeX, recSizeY);
+
+    int x = getCoord(recSizeX, myData.m, worldPos.x);
+    //printf("%d ", x);
+    int y = getCoord(recSizeY, myData.n, worldPos.y);
+    //printf("%d\n", y);
+
+    float width = 1;
+    sf::RectangleShape line({recSizeX, width});
+    line.setFillColor(sf::Color(0, 0, 0));
+
+    line.setRotation(sf::degrees(0));
+    line.setPosition({(x * recSizeX), (y * recSizeY)});
+    window->draw(line);
+    line.setPosition({(x * recSizeX), (y * recSizeY + recSizeY)});
+    window->draw(line);
+
+    line.setRotation(sf::degrees(90));
+
+    line.setPosition({(x * recSizeX + recSizeX), (y * recSizeY)});
+    window->draw(line);
+    line.setPosition({(x * recSizeX), (y * recSizeY)});
+    window->draw(line);
+
     if(!myData.answer)
     {
         if(clock->getElapsedTime() >= sf::seconds(0.5f))

@@ -34,7 +34,8 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode({800, 800}), "answer");
     window.setVerticalSyncEnabled(true);
-    window.setFramerateLimit(10);
+    window.setFramerateLimit(60);
+    window.setMouseCursorVisible(true);
 
     window.setPosition({10, 50});
     sf::Clock clock;
