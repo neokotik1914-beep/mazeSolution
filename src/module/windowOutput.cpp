@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <SFML\Graphics\RenderTarget.hpp>
 #include <math.h>
+#include <random>
 
 #include "module/windowOutput.h"
 #include "algorythm/maze.h"
@@ -12,6 +13,34 @@ const float sqrtTwo = 1.41421356;
 float _xSize = 0, _ySize = 0, _recSizeX = 0, _recSizeY = 0;
 
 using namespace sf;
+
+void drawGrass(RenderWindow *w, int row, int col, float sizeX, float sizeY, data myData)
+{
+    sf::RectangleShape grass({sizeX, sizeY});
+    grass.setFillColor(sf::Color(0, 255, 0));
+    grass.setPosition({(col * sizeX), (row * sizeY)});
+    w->draw(grass);
+
+    std::mt19937 rng(row * 73856093u + col * 19349663u);
+    std::uniform_real_distribution<float> dx(0, sizeX);
+    std::uniform_real_distribution<float> dy(sizeY / 15, sizeY);
+    std::uniform_int_distribution<int> countDist(4, 100);
+
+    int numGrass = countDist(rng);
+
+    sf::CircleShape gr(sizeX / 8, 3);
+    gr.setFillColor(sf::Color(0, 200, 0));
+    gr.scale({0.1f, 0.9f});
+
+    for(int i = 0; i < numGrass; i++)
+    {
+        float cordX = dx(rng);
+        float cordY = dy(rng);
+
+        gr.setPosition({(col * sizeX + cordX), (row * sizeY + cordY)});
+        w->draw(gr);
+    }
+}
 
 void drawWall(RenderWindow *w, float x, float y, float sizeX, float sizeY)
 {
@@ -59,10 +88,7 @@ void drawPath(RenderWindow *w, int row, int col, float sizeX, float sizeY, data 
     float offSetX = sizeX / 5;
     float offSetY = sizeY / 5;
 
-    sf::RectangleShape grass({sizeX, sizeY});
-    grass.setFillColor(sf::Color(0, 255, 0));
-    grass.setPosition({col * sizeX, row * sizeY});
-    w->draw(grass);
+    drawGrass(w, row, col, sizeX, sizeY, myData);
 
     sf::RectangleShape pathX({sizeX - offSetX, sizeY - (2 * offSetY)});
     pathX.setFillColor(sf::Color(255, 255, 0));
@@ -111,7 +137,9 @@ void drawPOI(RenderWindow *w, int y, int x, float sizeX, float sizeY, data myDat
     w->draw(house);
 }
 
-void winOut(data myData, RenderWindow *window)
+
+
+void winOut(data myData, RenderWindow *window, sf::Clock *clock)
 {
     
     float recSizeX = (float)(window->getSize().x)/myData.m;
@@ -126,8 +154,7 @@ void winOut(data myData, RenderWindow *window)
     sf::RectangleShape finish({recSizeX, recSizeY});
     finish.setFillColor(sf::Color(245, 0, 255));
 
-    sf::RectangleShape grass({recSizeX, recSizeY});
-    grass.setFillColor(sf::Color(0, 255, 0));
+    
 
     for(int i = 0; i < myData.n; i++)
     {
@@ -148,8 +175,8 @@ void winOut(data myData, RenderWindow *window)
             }
             else if(myData.arr[i][j] == 0)
             {
-                grass.setPosition({(j * recSizeX), (i * recSizeY)});
-                window->draw(grass);
+                drawGrass(window, i, j, recSizeX, recSizeY, myData);
+                
             }
             else if (myData.arr[i][j] == 3)
             {
@@ -159,8 +186,11 @@ void winOut(data myData, RenderWindow *window)
     }
     if(!myData.answer)
     {
+        if(clock->getElapsedTime() >= sf::seconds(0.5f))
+        {
+            return;
+        }
         sf::Texture gorillaTexture;
-
         if(!gorillaTexture.loadFromFile("C:/Users/user/code/mazeSolution/image.png"))
         {
             
@@ -169,7 +199,6 @@ void winOut(data myData, RenderWindow *window)
         sf::Sprite gorilla(gorillaTexture);
         gorilla.setPosition({0.f, 0.f});
 
-        // Масштабування на всю область вікна
         sf::Vector2u texSize = gorillaTexture.getSize();
         sf::Vector2u winSize = window->getSize();
         float scaleX = static_cast<float>(winSize.x) / texSize.x;

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 #include "algorythm/maze.h"
@@ -36,7 +37,7 @@ int main()
     window.setFramerateLimit(10);
 
     window.setPosition({10, 50});
-
+    sf::Clock clock;
     while (window.isOpen())
     {
         // check all the window's events that were triggered since the last iteration of the loop
@@ -48,8 +49,11 @@ int main()
             if (const auto* e = event->getIf<sf::Event::MouseButtonPressed>())
             {
                 if (e->button == sf::Mouse::Button::Left)
-                mouseWork(&myData, &window);
-                e = NULL;
+                {
+                    mouseWork(&myData, &window);
+                    e = NULL;
+                    clock.restart();
+                }
             }
             if (const auto* resized = event->getIf<sf::Event::Resized>())
             {
@@ -60,7 +64,7 @@ int main()
             
         }
         window.clear(sf::Color::White);
-        winOut(myData, &window);
+        winOut(myData, &window, &clock);
 
         window.display();
 

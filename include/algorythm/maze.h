@@ -1,6 +1,7 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 struct coords{

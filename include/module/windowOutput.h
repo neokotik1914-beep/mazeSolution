@@ -5,6 +5,6 @@
 
 #include "algorythm/maze.h"
 
-void winOut(data myData, sf::RenderWindow *window);
+void winOut(data myData, sf::RenderWindow *window, sf::Clock *clock);
 
 #endif
