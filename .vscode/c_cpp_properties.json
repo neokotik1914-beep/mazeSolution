@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Users/user/code/mazeSolution/build/_deps/sfml-src/include/SFML"
+            ]
+        }
+    ],
+    "version": 4
+}

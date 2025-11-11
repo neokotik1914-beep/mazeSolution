@@ -50,7 +50,12 @@ int main()
                 if (e->button == sf::Mouse::Button::Left)
                 mouseWork(&myData, &window);
                 e = NULL;
-                output(myData);
+            }
+            if (const auto* resized = event->getIf<sf::Event::Resized>())
+            {
+                // update the view to the new size of the window
+                sf::FloatRect visibleArea({0.f, 0.f}, sf::Vector2f(resized->size));
+                window.setView(sf::View(visibleArea));
             }
             
         }
