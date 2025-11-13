@@ -4,7 +4,7 @@
 
 void convert(data *myData, std::vector<std::vector<char>> maze)
 {
-    printf("Converting...\n");
+    //printf("Converting...\n");
     for(int i = 0; i < myData->n; i++)
     {
         myData->arr[i]=std::vector<int>(myData->m, -1);
@@ -33,6 +33,6 @@ void convert(data *myData, std::vector<std::vector<char>> maze)
             }
         }
     }
-    printf("Converted\n");
+    //printf("Converted\n");
     return;
 }

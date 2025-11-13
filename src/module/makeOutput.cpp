@@ -4,7 +4,7 @@
 #include "module/consts.h"
 
 void makeOutput(data *myData) {
-    printf("Making Output\n");
+    //printf("Making Output\n");
     int stack[3][MAX_STACK_LENGTH];
     int stackLength = 1;
     stack[0][0] = myData->start.x;

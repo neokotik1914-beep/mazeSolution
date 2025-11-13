@@ -11,7 +11,7 @@ std::vector<std::vector<char>> input()
         std::cerr << "Error: Could not open input.txt" << std::endl;
     }
   inFile >> n >> m;
-  printf("Size of array: %d %d\n", n, m);
+  //printf("Size of array: %d %d\n", n, m);
   std::vector<std::vector<char>> maze(n, std::vector<char>(m));
   for (int i = 0; i < n; i++)
   {
@@ -22,6 +22,6 @@ std::vector<std::vector<char>> input()
       
     }
   }
-  printf("=================\n");
+  //printf("=================\n");
   return maze;
 }

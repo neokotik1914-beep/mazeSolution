@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 #include "algorythm/maze.h"
 #include "module/input.h"
@@ -10,10 +11,11 @@
 #include "module/makeOutput.h"
 #include "module/windowOutput.h"
 #include "module/mouseWork.h"
+#include "module/sunMove.h"
 
 int main()
 {
-    printf("%d\n", MAX_STACK_LENGTH);
+    //printf("%d\n", MAX_STACK_LENGTH);
 
     std::vector<std::vector<char>> maze = input();
     data myData(maze.size(), maze[0].size(), -1);
@@ -25,10 +27,10 @@ int main()
 
     if(myData.answer)
     {
-        printf("Y\n");
+        //printf("Y\n");
     }
     else{
-        printf("N\n");
+        //printf("N\n");
     }
     //makeOutput(&myData);
 
@@ -39,6 +41,15 @@ int main()
 
     window.setPosition({10, 50});
     sf::Clock clock;
+
+    myData.sun.xf = 0;
+    myData.sun.yf = 0;
+
+    int sizeX = window.getSize().x;
+    int sizeY = window.getSize().y;
+    float T = 10;
+    float rad = sqrt(sizeX * sizeX + sizeY * sizeY) / 2;
+
     while (window.isOpen())
     {
         // check all the window's events that were triggered since the last iteration of the loop
@@ -51,9 +62,9 @@ int main()
             {
                 if (e->button == sf::Mouse::Button::Left)
                 {
+                    myData.currentTime = clock.getElapsedTime().asMilliseconds();
                     mouseWork(&myData, &window);
                     e = NULL;
-                    clock.restart();
                 }
             }
             if (const auto* resized = event->getIf<sf::Event::Resized>())
@@ -61,15 +72,22 @@ int main()
                 // update the view to the new size of the window
                 sf::FloatRect visibleArea({0.f, 0.f}, sf::Vector2f(resized->size));
                 window.setView(sf::View(visibleArea));
+                sizeX = window.getSize().x;
+                sizeY = window.getSize().y;
+                rad = sqrt(sizeX * sizeX + sizeY * sizeY) / 2;
             }
             
         }
+        myData.currentTime = clock.getElapsedTime().asMilliseconds();
+        sunMove(rad, T, &myData, sizeX / 2, sizeY / 2);
+
         window.clear(sf::Color::White);
-        winOut(myData, &window, &clock);
+
+        winOut(&myData, &window);
 
         window.display();
 
-
+        
     }
 
     output(myData);

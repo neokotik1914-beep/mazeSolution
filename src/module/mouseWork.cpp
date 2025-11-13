@@ -14,12 +14,12 @@ void mouseWork(data *myData, sf::RenderWindow *window)
     float recSizeX = (float)(window->getSize().x) / myData->m;
     float recSizeY = (float)(window->getSize().y) / myData->n;
 
-    printf("%f %f, %f %f ", worldPos.x, worldPos.y, recSizeX, recSizeY);
+    //printf("%f %f, %f %f ", worldPos.x, worldPos.y, recSizeX, recSizeY);
 
     int x = getCoord(recSizeX, myData->m, worldPos.x);
-    printf("%d ", x);
+    //printf("%d ", x);
     int y = getCoord(recSizeY, myData->n, worldPos.y);
-    printf("%d\n", y);
+    //printf("%d\n", y);
 
     
 

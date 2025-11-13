@@ -7,15 +7,16 @@
 #include "module/windowOutput.h"
 #include "algorythm/maze.h"
 #include "module/getCoord.h"
+#include "module/consts.h"
 
 #define _USE_MATH_DEFINES
 
-const float sqrtTwo = 1.41421356;
+
 float _xSize = 0, _ySize = 0, _recSizeX = 0, _recSizeY = 0;
 
 using namespace sf;
 
-void drawGrass(RenderWindow *w, int row, int col, float sizeX, float sizeY, data myData)
+void drawGrass(RenderWindow *w, int row, int col, float sizeX, float sizeY, data *myData)
 {
     sf::RectangleShape grass({sizeX, sizeY});
     grass.setFillColor(sf::Color(0, 255, 0));
@@ -84,7 +85,7 @@ inline bool isPathCell(int v)
     return (v == 3 || v == 9 || v == 10);
 }
 
-void drawPath(RenderWindow *w, int row, int col, float sizeX, float sizeY, data myData)
+void drawPath(RenderWindow *w, int row, int col, float sizeX, float sizeY, data *myData)
 {
     float offSetX = sizeX / 5;
     float offSetY = sizeY / 5;
@@ -99,25 +100,25 @@ void drawPath(RenderWindow *w, int row, int col, float sizeX, float sizeY, data 
     float x = col * sizeX;
     float y = row * sizeY;
 
-    if(row - 1 >= 0 && isPathCell(myData.arr[row - 1][col]))
+    if(row - 1 >= 0 && isPathCell(myData->arr[row - 1][col]))
     {
         pathY.setPosition({x + offSetX, y});
         w->draw(pathY);
     }
 
-    if(col + 1 < myData.m && isPathCell(myData.arr[row][col + 1]))
+    if(col + 1 < myData->m && isPathCell(myData->arr[row][col + 1]))
     {
         pathX.setPosition({x + offSetX, y + offSetY});
         w->draw(pathX);
     }
 
-    if(row + 1 < myData.n && isPathCell(myData.arr[row + 1][col]))
+    if(row + 1 < myData->n && isPathCell(myData->arr[row + 1][col]))
     {
         pathY.setPosition({x + offSetX, y + offSetY});
         w->draw(pathY);
     }
 
-    if(col - 1 >= 0 && isPathCell(myData.arr[row][col - 1]))
+    if(col - 1 >= 0 && isPathCell(myData->arr[row][col - 1]))
     {
         pathX.setPosition({x, y + offSetY});
         w->draw(pathX);
@@ -125,7 +126,7 @@ void drawPath(RenderWindow *w, int row, int col, float sizeX, float sizeY, data 
 }
 
 
-void drawPOI(RenderWindow *w, int y, int x, float sizeX, float sizeY, data myData)
+void drawPOI(RenderWindow *w, int y, int x, float sizeX, float sizeY, data *myData)
 {
     drawPath(w, y, x, sizeX, sizeY, myData);
 
@@ -133,7 +134,7 @@ void drawPOI(RenderWindow *w, int y, int x, float sizeX, float sizeY, data myDat
     float offSetY = sizeY / 6;
 
     sf::RectangleShape house({sizeX - 2 * offSetX, sizeY - 2 * offSetY});
-    house.setFillColor(sf::Color(227, 0, 77));
+    house.setFillColor(sf::Color(227 , 0, 77));
     house.setPosition({x * sizeX + offSetX, y * sizeY + offSetY});
     w->draw(house);
 
@@ -146,13 +147,12 @@ void drawPOI(RenderWindow *w, int y, int x, float sizeX, float sizeY, data myDat
     w->draw(roof);
 }
 
-
-
-void winOut(data myData, RenderWindow *window, sf::Clock *clock)
+void winOut(data *myData, RenderWindow *window)
 {
-    
-    float recSizeX = (float)(window->getSize().x)/myData.m;
-    float recSizeY = (float)(window->getSize().y)/myData.n;
+    float frameSizeX = (float)(window->getSize().x);
+    float frameSizeY = (float)(window->getSize().y);
+    float recSizeX = frameSizeX/myData->m;
+    float recSizeY = frameSizeY/myData->n;
 
     sf::RectangleShape path({recSizeX, recSizeY});
     path.setFillColor(sf::Color(255, 255, 0));
@@ -165,29 +165,28 @@ void winOut(data myData, RenderWindow *window, sf::Clock *clock)
 
     
 
-    for(int i = 0; i < myData.n; i++)
+    for(int i = 0; i < myData->n; i++)
     {
-        for(int j = 0; j < myData.m; j++)
+        for(int j = 0; j < myData->m; j++)
         {
-            if(myData.arr[i][j] == 1)
+            if(myData->arr[i][j] == 1)
             {
                 drawWall(window, j * recSizeX, i * recSizeY, recSizeX, recSizeY);
             }
-            else if(myData.arr[i][j] == 10)
+            else if(myData->arr[i][j] == 10)
             {
                 drawPOI(window, i, j, recSizeX, recSizeY, myData);
             }
-            else if(myData.arr[i][j] == 9)
+            else if(myData->arr[i][j] == 9)
             {
-                finish.setPosition({(j * recSizeX), (i * recSizeY)});
-                window->draw(finish);
+                drawPOI(window, i, j, recSizeX, recSizeY, myData);
             }
-            else if(myData.arr[i][j] == 0)
+            else if(myData->arr[i][j] == 0)
             {
                 drawGrass(window, i, j, recSizeX, recSizeY, myData);
                 
             }
-            else if (myData.arr[i][j] == 3)
+            else if (myData->arr[i][j] == 3)
             {
                 drawPath(window, i, j, recSizeX, recSizeY, myData);
             }
@@ -197,43 +196,61 @@ void winOut(data myData, RenderWindow *window, sf::Clock *clock)
     sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
     sf::Vector2f worldPos = window->mapPixelToCoords(localPosition);
 
-    recSizeX = (float)(window->getSize().x) / myData.m;
-    recSizeY = (float)(window->getSize().y) / myData.n;
+    recSizeX = (float)(window->getSize().x) / myData->m;
+    recSizeY = (float)(window->getSize().y) / myData->n;
 
-    //printf("winout %f %f, %f %f ", worldPos.x, worldPos.y, recSizeX, recSizeY);
+    ////printf("winout %f %f, %f %f ", worldPos.x, worldPos.y, recSizeX, recSizeY);
 
-    int x = getCoord(recSizeX, myData.m, worldPos.x);
-    //printf("%d ", x);
-    int y = getCoord(recSizeY, myData.n, worldPos.y);
-    //printf("%d\n", y);
+    int x = getCoord(recSizeX, myData->m, worldPos.x);
+    ////printf("%d ", x);
+    int y = getCoord(recSizeY, myData->n, worldPos.y);
+    ////printf("%d\n", y);
+
+    std::vector<sf::Vertex> verArr;
+    verArr.push_back({{(float)(myData->sun.xf), (float)(myData->sun.yf)}, sf::Color(0, 0, 0, 50), {100.f, 100.f}});
+
+    float radSun = sqrt(frameSizeX * frameSizeX + frameSizeY * frameSizeY) + 10;
+    int angles = 30;
+    for(int i = 0; i <= angles; i++)
+    {
+        float xVer = sin(2 * PI * i / angles) * radSun + myData->sun.xf;
+        float yVer = cos(2 * PI * i / angles) * radSun + myData->sun.yf;
+        verArr.push_back({{xVer, yVer}, sf::Color(0, 0, 0, 200), {100.f, 100.f}});
+    }
+
+    window->draw(verArr.data(), verArr.size(), sf::PrimitiveType::TriangleFan);
 
     float width = 1;
-    sf::RectangleShape line({recSizeX, width});
-    line.setFillColor(sf::Color(0, 0, 0));
+    sf::RectangleShape linex({recSizeX, width});
+    sf::RectangleShape liney({width, recSizeY});
+    linex.setFillColor(sf::Color(0, 0, 0));
+    liney.setFillColor(sf::Color(0, 0, 0));
 
-    line.setRotation(sf::degrees(0));
-    line.setPosition({(x * recSizeX), (y * recSizeY)});
-    window->draw(line);
-    line.setPosition({(x * recSizeX), (y * recSizeY + recSizeY)});
-    window->draw(line);
+    linex.setPosition({(x * recSizeX), (y * recSizeY)});
+    window->draw(linex);
+    linex.setPosition({(x * recSizeX), (y * recSizeY + recSizeY)});
+    window->draw(linex);
 
-    line.setRotation(sf::degrees(90));
 
-    line.setPosition({(x * recSizeX + recSizeX), (y * recSizeY)});
-    window->draw(line);
-    line.setPosition({(x * recSizeX), (y * recSizeY)});
-    window->draw(line);
+    liney.setPosition({(x * recSizeX + recSizeX), (y * recSizeY)});
+    window->draw(liney);
+    liney.setPosition({(x * recSizeX), (y * recSizeY)});
+    window->draw(liney);
 
-    if(!myData.answer)
+    ////printf("%f \n", calculateBright(myData, x * recSizeX, y * recSizeY, frameSizeX, frameSizeY));
+
+    
+
+    if(!myData->answer)
     {
-        if(clock->getElapsedTime() >= sf::seconds(0.5f))
+        if(myData->currentTime >= myData->wrongAnswerTimeStart + 100)
         {
             return;
         }
         sf::Texture gorillaTexture;
-        if(!gorillaTexture.loadFromFile("C:/Users/user/code/mazeSolution/image.png"))
+        if(!gorillaTexture.loadFromFile("data/image.png"))
         {
-            
+            printf("asdasdasd\n");
         }
 
         sf::Sprite gorilla(gorillaTexture);
