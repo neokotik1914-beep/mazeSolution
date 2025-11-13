@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "algorythm\mazeSolver.h"
-#include "module\consts.h"
+#include "algorythm/mazeSolver.h"
+#include "module/consts.h"
 
 void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLength, bool& boolGlobal)
 {
@@ -50,10 +50,12 @@ void walk(data *myData, int stack[][MAX_STACK_LENGTH], int index, int& stackLeng
     }
 }
 
-bool solve(data *myData)
+void solve(data *myData)
 {
-  printf("Solving...\n");
+  ////printf("Solving...\n");
   bool boolGlobal = 0;
+  myData->arr[myData->start.x][myData->start.y] = 0;
+  myData->arr[myData->finish.x][myData->finish.y] = 0;
   int stack[4][MAX_STACK_LENGTH];
   int stackLength = 1;
   stack[0][0] = myData->start.x;
@@ -67,14 +69,14 @@ bool solve(data *myData)
     int a = MAX_STACK_LENGTH;
     if(stackLength >= a - 500)
     {
-      printf("ACHTUNG!!\n");
+      //printf("ACHTUNG!!\n");
     }
     if(boolGlobal)
     {
       index = i;
     }
   }
-  printf("Walked %d\n", stackLength);
+  ////printf("Walked %d\n", stackLength);
   if(boolGlobal)
   {
   while (true)
@@ -90,6 +92,23 @@ bool solve(data *myData)
 
      }
     }
-    printf("Solved\n");
-    return boolGlobal;
+    for(int i = 0; i < myData->n; i++)
+    {
+      for(int j = 0; j < myData->m; j++)
+      {
+        if(myData->arr[i][j] == 2)
+        {
+          myData->arr[i][j] = 0;
+        }
+      }
+    }
+    myData->arr[myData->start.x][myData->start.y] = 10;
+    myData->arr[myData->finish.x][myData->finish.y] = 9;
+    //printf("Solved\n");
+    myData->answer = boolGlobal;
+    if(!boolGlobal)
+    {
+      myData->wrongAnswerTimeStart = myData->currentTime;
+    }
+    return;
 }

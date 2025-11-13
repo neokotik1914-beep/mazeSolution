@@ -27,3 +27,5 @@ add_executable(main ${SOURCES})
 target_compile_features(main PRIVATE cxx_std_17)
 target_include_directories(main PRIVATE src include)
 target_link_libraries(main PRIVATE SFML::Graphics)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
